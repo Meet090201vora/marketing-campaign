@@ -249,8 +249,7 @@ if st.button("Generate"):
         """
 
         with col5:
-            with st.expander("Email Draft"):
-                st.markdown(result, unsafe_allow_html=True)
+            st.markdown(result, unsafe_allow_html=True)
         #st.markdown(result)
 
         # Process Image if Available
@@ -279,11 +278,10 @@ if st.button("Generate"):
                 with st.spinner("Analyzing image content... Please wait."):
                     status, msg = process_image_input(result, temp_image_path)
                     if status:
-                        with st.expander("Theme aligned Email"):
-                            if os.path.exists(temp_image_path):
-                                os.remove(temp_image_path)
+                        if os.path.exists(temp_image_path):
+                            os.remove(temp_image_path)
                                 #st.code(msg,'markdown')
-                            st.markdown(msg, unsafe_allow_html=True)
+                        st.markdown(msg, unsafe_allow_html=True)
                         # delete the file of image
                         
                     else:
