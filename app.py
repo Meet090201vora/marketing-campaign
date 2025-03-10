@@ -240,7 +240,7 @@ if st.button("Generate"):
                 image = Image.open(temp_image_path)
                 # Resize to 512x1024
                 image = image.resize((350, 1000))
-                st.image(image, caption="Uploaded Image", use_column_width=True)
+                st.image(image, caption="Uploaded Image", use_container_width=True)
 
 
         with col7:
