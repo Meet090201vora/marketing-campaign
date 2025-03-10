@@ -16,7 +16,7 @@ st.sidebar.title("")
 
 # OpenAI API Client
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = st.secrets['OPENAI_API_KEY'] #os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
 # Ensure temp directory exists

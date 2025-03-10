@@ -1,14 +1,16 @@
 import os
 import io
 import base64
+import streamlit as st
 from PIL import Image
 import requests
 from prompt import system_prompt_image
 from dotenv import load_dotenv
-load_dotenv()
 
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+
+# load_dotenv()
+api_key = st.secrets['OPENAI_API_KEY'] #os.getenv("OPENAI_API_KEY")
 
 def image_summarizer(input_email, base64_image, url_flag:bool=False):
     """This function takes an image as input and returns a summary of the image content.
