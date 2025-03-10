@@ -249,42 +249,43 @@ if st.button("Generate"):
         """
 
         with col5:
-            st.markdown(result, unsafe_allow_html=True)
+            with st.expander(label="Email Copy", expanded=True):
+                st.markdown(result, unsafe_allow_html=True)
         #st.markdown(result)
 
         # Process Image if Available
         with col6:
-            if temp_image_path:
-                image = Image.open(temp_image_path)
+            with st.expander(label="Marketing Theme",expanded=True):
+                if temp_image_path:
+                    image = Image.open(temp_image_path)
 
-                # Define target width
-                target_width = 512
-                
-                # Get original image size
-                original_width, original_height = image.size
+                    # Define target width
+                    target_width = 512
+                    
+                    # Get original image size
+                    original_width, original_height = image.size
 
-                # Calculate new height while maintaining aspect ratio
-                aspect_ratio = original_height / original_width
-                new_height = int(target_width * aspect_ratio)
+                    # Calculate new height while maintaining aspect ratio
+                    aspect_ratio = original_height / original_width
+                    new_height = int(target_width * aspect_ratio)
 
-                # Resize image
-                resized_image = image.resize((target_width, new_height))
-                
-                st.image(resized_image, caption="Uploaded Image", use_container_width=True)
+                    # Resize image
+                    resized_image = image.resize((target_width, new_height))
+
+                    st.image(resized_image, caption="Uploaded Image", use_container_width=True)
 
 
         with col7:
-            if temp_image_path:
-                with st.spinner("Analyzing image content... Please wait."):
-                    status, msg = process_image_input(result, temp_image_path)
-                    if status:
-                        if os.path.exists(temp_image_path):
-                            os.remove(temp_image_path)
-                                #st.code(msg,'markdown')
-                        st.markdown(msg, unsafe_allow_html=True)
-                        # delete the file of image
-                        
-                    else:
-                        st.error("❌ Error in image processing.")
+            with st.expander(label="Theme aligned mail",expanded=True):
+                if temp_image_path:
+                    with st.spinner("Analyzing image content... Please wait."):
+                        status, msg = process_image_input(result, temp_image_path)
+                        if status:
+                            if os.path.exists(temp_image_path):
+                                os.remove(temp_image_path)
+                                    #st.code(msg,'markdown')
+                            st.markdown(msg, unsafe_allow_html=True)
+                        else:
+                            st.error("❌ Error in image processing.")
     else:
         st.error(f"❌ Error: {result}")
