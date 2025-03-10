@@ -271,7 +271,7 @@ if st.button("Generate"):
                 # Resize image
                 resized_image = image.resize((target_width, new_height))
                 
-                st.image(resized_image, caption="Uploaded Image", use_column_width=True)
+                st.image(resized_image, caption="Uploaded Image", use_container_width=True)
 
 
         with col7:
