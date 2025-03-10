@@ -9,6 +9,7 @@ from config import *
 from openai import OpenAI
 from utils import get_image_base64, image_summarizer
 from PIL import Image
+import html
 
 # custom layout for the app in size
 st.set_page_config(layout="wide", page_title="Email Marketing App")
@@ -204,8 +205,8 @@ with col13:
 
 
 # User Inputs
-goal = st.text_input("Goal of the email", placeholder="Increase sales by 20%")
 brief_description = st.text_area("Brief Description", placeholder="A campaign to educate customers about our product's benefits.")
+goal = st.text_area("Goal of the email", placeholder="Increase sales by 20%")
 points_to_cover = st.text_area("Additional Information", placeholder="- Brand Info\n- Personal Message\n- Year Highlights\n- Customer Impact")
 
 # Image Upload Section (Processed immediately)
@@ -235,7 +236,7 @@ with st.expander("Preview Before Generating"):
 # Generate Button
 if st.button("Generate"):
     with st.spinner("Generating content... Please wait."):
-        # time.sleep(2)  # Simulate processing time
+        time.sleep(2)  # Simulate processing time
         # status, result = True, "Hello"  # Placeholder, replace with actual call
         status, result = generate_content(selected_brand, selected_formula, selected_tags, discount, goal, brief_description, points_to_cover, brand_service_target, campaign_angle, campaign_category)
 
@@ -276,15 +277,37 @@ if st.button("Generate"):
 
 
         with col7:
-            with st.expander(label="Theme aligned mail",expanded=True):
+            with st.expander(label="Theme aligned Email",expanded=True):
                 if temp_image_path:
                     with st.spinner("Analyzing image content... Please wait."):
                         status, msg = process_image_input(result, temp_image_path)
                         if status:
-                            if os.path.exists(temp_image_path):
-                                os.remove(temp_image_path)
+                            # if os.path.exists(temp_image_path):
+                            #     os.remove(temp_image_path)
                                     #st.code(msg,'markdown')
+                            msg = html.escape(msg, quote=True)
+                            copy_code = f"""
+                                        <script>
+                                            function copyToClipboard(text, buttonId) {{
+                                                navigator.clipboard.writeText(text);
+                                                var button = document.getElementById(buttonId);
+                                                button.innerHTML = "Copied to Clipboard ✅"; // Change to checkmark
+                                                setTimeout(function() {{
+                                                    button.innerHTML = "Copy to Clipboard 📋"; // Revert back to clipboard icon
+                                                }}, 2000); // Reset after 2 seconds
+                                            }}
+                                        </script>
+                                        <div>
+                                            <button id="copyButton" onclick="copyToClipboard(`{msg}`, 'copyButton')" 
+                                                style="margin: none; border: none; text-align: center; background: #9E4AD8; cursor: pointer; font-size: 14px; display: block; color: white; font-family: sans-serif;">
+                                                Copy to Clipboard 📋
+                                            </button>
+                                        </div>
+                                    """
+                            
+                            
                             st.markdown(msg, unsafe_allow_html=True)
+                            st.components.v1.html(copy_code, height=60)    
                         else:
                             st.error("❌ Error in image processing.")
     else:
