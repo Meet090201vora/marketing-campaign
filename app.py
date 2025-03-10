@@ -12,10 +12,9 @@ from PIL import Image
 
 # custom layout for the app in size
 st.set_page_config(layout="wide", page_title="Email Marketing App")
-st.sidebar.title("")
 
 # OpenAI API Client
-load_dotenv()
+# load_dotenv()
 api_key = st.secrets['OPENAI_API_KEY'] #os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
@@ -139,6 +138,14 @@ st.markdown(
         margin-left: 10px;
         margin-right: 10px;
     }
+
+    button{
+        float: right;
+    }
+
+    [data-testid="stSidebar"] {
+            width: 200px !important;  /* Adjust width as needed */
+    }
     </style>
     """, 
     unsafe_allow_html=True
@@ -155,6 +162,18 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
+st.sidebar.title("Model Selection")
+
+# First model selection dropdown
+model_1 = st.sidebar.selectbox("", ["Claude 3.7", "GPT-4.5-Preview"])
+st.sidebar.markdown("---")  # Adds a horizontal line for separation
+
+# Copyright notice at the bottom
+st.sidebar.markdown(
+    "© 2025 Unhyd.\nAll rights reserved.",
+    unsafe_allow_html=True
+)
 # Layout for input fields
 col1, col2, col3 = st.columns([2, 2, 4])
 
@@ -173,7 +192,7 @@ discount = st.slider("Select Discount Percentage:", min_value=0, max_value=100, 
 col11, col12, col13 = st.columns([4,2,2])
 brand_service_target = ""
 with col11:
-    brand_service_target = st.text_input("Which brand service is the mail targeting?", placeholder="Unhyde has launched a new web design service for small buisnees owners.")
+    brand_service_target = st.text_input("Define the service or product", placeholder="Glow Ups Microneedling service")
 
 campaign_angle = "Promotional"
 with col12:
@@ -185,9 +204,9 @@ with col13:
 
 
 # User Inputs
-goal = st.text_input("Goal of the email:", placeholder="Increase sales by 20%")
-brief_description = st.text_area("Brief Description:", placeholder="A campaign to educate customers about our product's benefits.")
-points_to_cover = st.text_area("Points to Cover:", placeholder="- Brand Info\n- Personal Message\n- Year Highlights\n- Customer Impact")
+goal = st.text_input("Goal of the email", placeholder="Increase sales by 20%")
+brief_description = st.text_area("Brief Description", placeholder="A campaign to educate customers about our product's benefits.")
+points_to_cover = st.text_area("Additional Information", placeholder="- Brand Info\n- Personal Message\n- Year Highlights\n- Customer Impact")
 
 # Image Upload Section (Processed immediately)
 # st.subheader("📷 Upload an Image for Analysis")
@@ -238,9 +257,21 @@ if st.button("Generate"):
         with col6:
             if temp_image_path:
                 image = Image.open(temp_image_path)
-                # Resize to 512x1024
-                image = image.resize((350, 1000))
-                st.image(image, caption="Uploaded Image", use_container_width=True)
+
+                # Define target width
+                target_width = 512
+                
+                # Get original image size
+                original_width, original_height = image.size
+
+                # Calculate new height while maintaining aspect ratio
+                aspect_ratio = original_height / original_width
+                new_height = int(target_width * aspect_ratio)
+
+                # Resize image
+                resized_image = image.resize((target_width, new_height))
+                
+                st.image(resized_image, caption="Uploaded Image", use_column_width=True)
 
 
         with col7:
@@ -249,10 +280,12 @@ if st.button("Generate"):
                     status, msg = process_image_input(result, temp_image_path)
                     if status:
                         with st.expander("Theme aligned Email"):
+                            if os.path.exists(temp_image_path):
+                                os.remove(temp_image_path)
+                                #st.code(msg,'markdown')
                             st.markdown(msg, unsafe_allow_html=True)
                         # delete the file of image
-                        if os.path.exists(temp_image_path):
-                            os.remove(temp_image_path)
+                        
                     else:
                         st.error("❌ Error in image processing.")
     else:
