@@ -195,13 +195,13 @@ brand_service_target = ""
 with col11:
     brand_service_target = st.text_input("Define the service or product", placeholder="Glow Ups Microneedling service")
 
-campaign_angle = "Promotional"
+campaign_category = "Promotional"
 with col12:
-    campaign_angle = st.selectbox("Select Campaign Angle", list(campaign_categories.keys()), index=0)
+    campaign_category = st.selectbox("Select Campaign Category", list(campaign_categories.keys()), index=0)
 
-campaign_category = "Tips and Tricks"
+campaign_angle = "Tips and Tricks"
 with col13:
-    campaign_category = st.selectbox("Select Campaign Category", campaign_categories[campaign_angle])
+    campaign_angle = st.selectbox("Select Campaign Angle", campaign_categories[campaign_category])
 
 
 # User Inputs
