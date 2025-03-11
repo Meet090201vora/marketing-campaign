@@ -299,15 +299,15 @@ if st.button("Generate"):
                                         </script>
                                         <div>
                                             <button id="copyButton" onclick="copyToClipboard(`{msg}`, 'copyButton')" 
-                                                style="margin: none; border: none; text-align: center; background: #9E4AD8; cursor: pointer; font-size: 14px; display: block; color: white; font-family: sans-serif;">
+                                                style="margin: none; border: 1px solid #cb4bff; border-radius: 2px; text-align: center; background: transparent; cursor: pointer; font-size: 14px; display: block; color: white; float: right; font-family: sans-serif;">
                                                 Copy to Clipboard 📋
                                             </button>
                                         </div>
                                     """
                             
-                            
+                            st.components.v1.html(copy_code, height=60) 
                             st.markdown(msg, unsafe_allow_html=True)
-                            st.components.v1.html(copy_code, height=60)    
+                               
                         else:
                             st.error("❌ Error in image processing.")
     else:
